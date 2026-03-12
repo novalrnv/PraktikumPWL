@@ -21,8 +21,12 @@ class PostForm
         return $schema
             ->components([
                 //
-                TextInput::make('title'),
-                TextInput::make('slug'),
+                TextInput::make('title')
+                    ->required()
+                    ->minLength(5),
+                TextInput::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true),
                 Select::make('category_id')
                     ->label('Category')
                     ->options(\App\Models\Category::all()->pluck('name', 'id'))
@@ -30,8 +34,8 @@ class PostForm
                 ColorPicker::make('color'),
                 // MarkdownEditor::make('content'),
                 RichEditor::make('content'),
-                FileUpload::make('Image')
-                    ->disk("public")
+                FileUpload::make('image')
+                    ->disk('public')
                     ->directory("posts"),
                 TagsInput::make("tags"),
                 Checkbox::make("published"),
