@@ -31,12 +31,25 @@ class PostForm
                     ->schema([
                         //Grouping fields into 2 columns
                         Group::make([
-                            TextInput::make("title"),
-                            TextInput::make("slug"),
+                            TextInput::make("title")
+                                ->rules('required | min:5 | max:10')
+                                ->validationMessages([
+                                    "min" => 'Title at least 5 characters',
+                                ]),
+                            TextInput::make("slug")
+                                ->rules('required', 'min:3')
+                                ->unique()
+                                ->validationMessages([
+                                    "unique" => 'Slug must be unique'
+                                ]),
                             Select::make("category_id")
                                 ->relationship("category", "name")
                                 ->preload()
-                                ->searchable(),
+                                ->searchable()
+                                ->required()
+                                ->validationMessages([
+                                    "required" => 'Category not picked',
+                                ]),
                             ColorPicker::make("color"),
                         ])->columns(2),
 
@@ -52,7 +65,8 @@ class PostForm
                         ->schema([
                             FileUpload::make("image")
                                 ->disk("public")
-                                ->directory("posts"),
+                                ->directory("posts")
+                                ->required(),
                         ]),
 
                     //Section 3 - meta
