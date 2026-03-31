@@ -16,6 +16,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Group;
+use App\Models\Category;
 
 class PostForm
 {
@@ -44,12 +45,9 @@ class PostForm
                                 ]),
                             Select::make("category_id")
                                 ->relationship("category", "name")
-                                ->preload()
+                                ->options(Category::all()->pluck('name', 'id'))
                                 ->searchable()
-                                ->required()
-                                ->validationMessages([
-                                    "required" => 'Category not picked',
-                                ]),
+                                ->required(),
                             ColorPicker::make("color"),
                         ])->columns(2),
 
