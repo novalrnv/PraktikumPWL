@@ -71,7 +71,11 @@ class PostForm
                     Section::make("Meta Information")
                         ->icon('heroicon-o-cog-6-tooth')
                         ->schema([
-                            TagsInput::make("tags"),
+                            Select::make("tags")
+                                ->multiple()
+                                ->relationship("tags", "name")
+                                ->searchable()
+                                ->preload(),
                             Checkbox::make("published"),
                             DateTimePicker::make("published_at"),
                         ]),
